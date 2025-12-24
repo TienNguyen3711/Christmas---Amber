@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Christmas - Amber </title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Three.js + MediaPipe (để ở head hoặc trước </body> đều được) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"
+        defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"
+        defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous" defer></script>
+</head>
+
+<body>
+    <!-- ====== SECTION 1: INTRO ====== -->
+    <section class="intro" id="intro">
+        <div class="sky" id="sky" aria-hidden="true"></div>
+
+        <div class="hero">
+            <div class="left">
+                <div class="top-copy">
+                    <h1 class="title">Welcome Lady</h1>
+                </div>
+
+                <div class="bottom-copy">
+                    <div class="reveal-text" id="revealText" aria-live="polite"></div>
+                </div>
+            </div>
+
+            <div class="right" id="rightMedia">
+                <!-- sửa src thành ảnh thật -->
+                <img src="amber.JPG" alt="Right image" id="heroImage">
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== SECTION 2: Christmas Tree ====== -->
+    <section class="magic" id="magicSection">
+        <div id="error-log"></div>
+        <div id="ui-layer">
+            <div class="guide">
+                🖐 <b>Open:</b> Explode &nbsp;|&nbsp;
+                👌 <b>Choose:</b> Photo &nbsp;|&nbsp;
+                🫶 <b>Heart:</b> Best for last 😁  &nbsp;|&nbsp;
+                ✊ <b>Fist:</b> Tree
+            </div>
+            <button id="btnStart">START MAGIC</button>
+        </div>
+        <div id="canvas-container"></div>
+        <video class="input_video" style="display:none"></video>
+        <canvas id="camera-preview"></canvas>
+    </section>
+
+    <!-- JS -->
+    <script src="main.js" defer></script>
+    <script src="magic.js" defer></script>
+</body>
+
+</html>
+<!-- GALLERY -->

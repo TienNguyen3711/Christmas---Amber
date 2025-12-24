@@ -1,0 +1,278 @@
+/* Reset */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { overflow-x: hidden; overflow-y: auto; background: #03040a; color: #eaeefc; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+
+/* Sky */
+.intro { position: relative; min-height: 100vh; }
+.sky{
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: radial-gradient(ellipse at bottom, #0b1b3a 0%, #05070f 60%, #03040a 100%);
+}
+
+
+/* Layout: two-column hero */
+.hero{position:relative;display:flex;align-items:stretch;min-height:100vh;z-index:1}
+.left{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:32px;min-width:320px}
+.right{width:44vw;min-width:320px;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse at bottom, var(--bg-top) 0%, var(--bg-mid) 60%, var(--bg-bottom) 100%)}
+.right img{width:80%;height:80%;object-fit:cover;border-radius:6px;box-shadow:0 12px 30px rgba(0,0,0,0.5);transition:opacity 600ms ease, transform 600ms ease;transform: translateY(8px);opacity:0.94}
+.right img.reveal{transform: translateY(0);opacity:1}
+
+/* dim right column when scrolling so image fades but remains visible */
+.right.dimmed img{ opacity: 0; transform: scale(0.98); }
+
+/* when right media is hidden (legacy) keep it dimmed instead of fully removed */
+.right.hidden img{ opacity: 0; transform: scale(0.98); pointer-events: auto; }
+
+.bottom-copy{align-self:flex-start;padding:18px 8px 36px}
+.reveal-text{font-size:20px;line-height:1.2;color:#e8f6ff;max-width:60ch;opacity:0;transform:translateY(8px);transition:opacity 600ms ease, transform 600ms ease}
+.reveal-text .word{opacity:0;display:inline-block;margin-right:8px;transform:translateY(6px);transition:opacity 260ms ease, transform 260ms ease;font-style:italic;font-size:0.95em}
+
+/* when reveal is active */
+.reveal-text.active{opacity:1;transform:translateY(0)}
+.reveal-text .word.visible{opacity:1;transform:translateY(0)}
+
+/* fade hero up when next content shows */
+.hero.faded{opacity:0;transform:translateY(-18px);transition:opacity 520ms ease, transform 520ms ease}
+
+/* Fade only the left column when scrolling into the next section */
+.left{transition:opacity 520ms ease, transform 520ms ease}
+.left.faded{opacity:0;transform:translateY(-12px)}
+
+.next-section{min-height:70vh;padding:80px 24px;background:linear-gradient(180deg,#031026, #011021);color:#dfefff}
+.next-section .container{max-width:900px;margin:0 auto}
+
+/* Một sao băng */
+.shooting-star{
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+
+  width: var(--len);
+  height: var(--thickness, 2px);
+  transform-origin: left center;
+
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  transform: rotate(var(--angle)) translateZ(0);
+  will-change: transform, opacity, filter;
+  backface-visibility: hidden;
+}
+
+/* “Đầu sao” (spark) */
+  .shooting-star::before{
+    /* long tapered trail */
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 100%;
+    width: var(--len);
+    transform-origin: left center;
+      transform: translateY(-50%);
+      background: linear-gradient(90deg,
+        rgba(255,255,255,0.0) 0%,
+        rgba(180,215,255,var(--tail-opacity,0.45)) 20%,
+        rgba(255,255,255,0.95) 52%,
+        rgba(255,255,255,0.0) 100%
+      );
+      filter: blur(0.9px) drop-shadow(0 0 8px rgba(170,210,255,0.85));
+      opacity: 0;
+      transition: opacity 220ms ease, filter 300ms ease, transform 300ms ease;
+      will-change: opacity, transform, filter;
+  }
+
+  .shooting-star::after{
+    /* bright head spark */
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(200,235,255,0.9) 35%, rgba(255,255,255,0) 70%);
+    filter: drop-shadow(0 0 10px rgba(220,240,255,0.95));
+    opacity: 0;
+    transition: opacity 220ms ease, transform 260ms ease, filter 260ms ease;
+  }
+
+  /* make trail/head visible while animation runs */
+  .shooting-star.animate::before,
+  .shooting-star.animate::after{
+    opacity: 1;
+  }
+
+  /* gentle tail animation in sync with main animation */
+  .shooting-star.animate::before{
+    animation: tail-blur var(--dur) ease 1 both;
+  }
+
+  /* small bright cross-shaped spark head inside each star */
+  .shooting-star .spark{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .shooting-star .spark::before,
+  .shooting-star .spark::after{
+    content: '';
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    filter: drop-shadow(0 0 6px rgba(200,230,255,0.9));
+  }
+  .shooting-star .spark::before{
+    width: 2px; height: 14px; border-radius: 2px; opacity: 0.95;
+  }
+  .shooting-star .spark::after{
+    width: 14px; height: 2px; border-radius: 2px; opacity: 0.85;
+  }
+
+  /* small diagonal glints for more star-like shape */
+  .shooting-star .spark::before,
+  .shooting-star .spark::after{
+    background: linear-gradient(90deg, rgba(255,255,255,1), rgba(180,215,255,0.95));
+  }
+
+  .shooting-star.animate .spark{ animation: spark-flicker calc(var(--dur) * 0.12) ease-out 1; opacity: 1; }
+
+  @keyframes spark-flicker{
+    0% { transform: translateY(-50%) scale(0.9); opacity: 0.0; }
+    10% { opacity: 1; transform: translateY(-50%) scale(1.05); }
+    70% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-50%) scale(0.9); }
+  }
+
+/* run a single animation once; JS will re-trigger to loop smoothly */
+.shooting-star.animate{
+  animation: shoot var(--dur) cubic-bezier(.16,.84,.44,1) 1 both;
+}
+
+/* Animation: xuất hiện -> bay -> biến mất */
+@keyframes shoot{
+  0% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translate3d(0,0,0) scaleX(1) scaleY(1);
+    filter: blur(0);
+  }
+  10% {
+    opacity: 1;
+    transform: rotate(calc(var(--angle) - 1.2deg)) translate3d(calc(var(--dist) * 0.12), 0, 0) scaleX(1.02);
+    filter: blur(0);
+  }
+  50% {
+    opacity: 1;
+    transform: rotate(var(--angle)) translate3d(calc(var(--dist) * 0.56), 0, 0) scaleX(1);
+    filter: blur(0.4px);
+  }
+  85% {
+    opacity: 0.7;
+    transform: rotate(var(--angle)) translate3d(calc(var(--dist) * 0.9), 0, 0) scaleX(0.96) scaleY(0.96);
+    filter: blur(1.2px) saturate(1.03);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translate3d(var(--dist), 0, 0) scaleX(0.92) scaleY(0.92);
+    filter: blur(2px) saturate(1.05);
+  }
+}
+
+@keyframes tail-blur{
+  0%{ opacity: 0; filter: blur(0); }
+  8%{ opacity: 1; filter: blur(0.6px); }
+  78%{ opacity: 1; filter: blur(0.8px); }
+  100%{ opacity: 0; filter: blur(2px); }
+}
+
+/* Demo content */
+.content{
+  position: relative;
+  z-index: 1;
+  padding: 48px 24px;
+  max-width: 900px;
+}
+h1{ margin: 0 0 10px; font-size: 40px; }
+p{ margin: 0; opacity: 0.85; }
+
+/* Giảm hiệu ứng cho người dùng prefer-reduced-motion */
+@media (prefers-reduced-motion: reduce){
+  .shooting-star{ animation: none !important; opacity: 0.6; }
+}
+
+.magic{
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+
+.guide{
+  color: rgba(255,255,255,0.75);
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  white-space: nowrap;
+}
+
+#canvas-container{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+canvas{
+  display: block;
+}   
+
+#ui-layer{
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 100;
+  pointer-events: auto;   /* ✅ cho phép click */
+}
+
+#ui-layer .guide{
+  pointer-events: none;   /* ✅ guide không bắt chuột */
+}
+#ui-layer button{
+  margin-top: 12px;
+  padding: 10px 18px;
+  font-size: 16px;
+  color: #05070f;
+  background: #e1f0ff;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: background 220ms ease, box-shadow 220ms ease, transform 150ms ease;
+}
+#ui-layer button:hover{
+  background: #c8e4ff;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  transform: translateY(-2px);
+}
+#ui-layer button:active{
+  background: #aed4ff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  transform: translateY(0);
+}
