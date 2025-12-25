@@ -7,7 +7,7 @@
     // =========================
     // 1) RESOURCES CONFIG
     // =========================
-    const MUSIC_URL = "./audio.mp3";
+    const MUSIC_URL = "./Mê Ry Chí Mớt_audio.mp3";
     let bgMusic = null;
 
     const loader = new THREE.TextureLoader();
